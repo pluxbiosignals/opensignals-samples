@@ -78,7 +78,7 @@ class TCPClient(object):
                     print message
                     self.inputCheck = []
                 else:
-                    #print message
+                    #print(message)
                     message = json.loads(message)
                     message = message["returnData"]
                     if not self.txtFile.getHasHeader():
@@ -171,4 +171,4 @@ if __name__ == "__main__":
 
     print "END"
 
-#tcp_ip_client_example.py | 2019-08-01
+#tcp_ip_client_sample.py | 2019-08-01
