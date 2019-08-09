@@ -34,8 +34,13 @@ def action_decode(action):
     elif action == '5':
         return 'start'
     elif action == '6':
-        return 'stop'
+        device = str(raw_input('MAC or DEVICE_ID: '))
+        channel = str(raw_input('Number of the digital output channel: '))
+        state = str(raw_input('Enable (1) or disable (0) digital output channel?: '))
+        return 'set_digital_output_channel,' + device + ',' + channel + ',' + state
     elif action == '7':
+        return 'stop'
+    elif action == '8':
         return ''
     else:
         return ''
@@ -87,7 +92,10 @@ class TCPClient(object):
                     else:
                         dataframe = []
                         for device in message.keys():
-                            dataframe.append(pd.DataFrame(message[device]))
+                            try:
+                                dataframe.append(pd.DataFrame(message[device]))
+                            except:
+                                dataframe.append(pd.Series(message[device]))
                         dataframe = pd.concat(dataframe, axis=1, ignore_index=True)
                         for line in dataframe.values:
                             self.txtFile.addData('\n')
@@ -99,7 +107,7 @@ class TCPClient(object):
                 except Queue.Empty:
                     pass
                 else:
-                    print "send "
+                    # print "send "
                     self.socket.send(next_msg)
 
             for s in exceptional:
@@ -145,12 +153,13 @@ class SaveAcquisition(object):
 if __name__ == "__main__":
     MENU_IMPUT = {0: 'devices',
                   1: 'config,{MAC|DEVICE_ID}',
-                  2: 'config,{MAC|DEVICE_ID}, PARAM, VALUE',
+                  2: 'config,{MAC|DEVICE_ID}, {PARAM}, {VALUE}',
                   3: 'enable,{MAC|DEVICE_ID}',
                   4: 'disable,{MAC|DEVICE_ID}',
                   5: 'start',
-                  6: 'stop',
-                  7: 'exit'
+                  6: 'set_digital_output, {MAC|DEVICE_ID}, {CHANNEL}, {STATE}',
+                  7: 'stop',
+                  8: 'exit'
                   }
 
     CONNECTION = TCPClient()
@@ -161,9 +170,9 @@ if __name__ == "__main__":
         user_action = str(raw_input('New action: '))
         if user_action == '5':
             CONNECTION.setIsAcquiring(True)
-        elif user_action == '6':
-            CONNECTION.setIsAcquiring(False)
         elif user_action == '7':
+            CONNECTION.setIsAcquiring(False)
+        elif user_action == '8':
             CONNECTION.stop()
             break
         new_msg = action_decode(user_action)
