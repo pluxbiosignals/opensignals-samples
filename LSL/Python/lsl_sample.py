@@ -89,16 +89,16 @@ class Lsl():
 def show_menu():
     print('')
     for id in MENU_IMPUT.keys():
-        print str(id) + ' | ' + MENU_IMPUT[id]
+        print(str(id) + ' | ' + MENU_IMPUT[id])
 
 def process_action(user_action):
     if user_action == '0':
         lsl.recv_data_unspecified_OS_stream()
     elif user_action == '1':
-        mac_address = str(raw_input('MAC address: '))
+        mac_address = str(input('MAC address: '))
         lsl.recv_data_PLUX_device(mac_address)
     elif user_action == '2':
-        hostname = str(raw_input('Host name: '))
+        hostname = str(input('Host name: '))
         lsl.recv_data_host(hostname)
     elif user_action == '3':
         lsl.recv_stream_metadata()
@@ -115,7 +115,7 @@ if __name__ == "__main__":
 
     while True:
         show_menu()
-        user_action = str(raw_input('New action: '))
+        user_action = str(input('New action: '))
         process_action(user_action)
 
 

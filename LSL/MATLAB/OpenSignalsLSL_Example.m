@@ -21,11 +21,11 @@ while isempty(streams)
 end
 disp('OpenSignals stream found...');
 
-% Create an inlet to receive signal samples from the stream
-inlet = lsl_inlet(streams{1});
-
 % Get information about the stream
-stream_info = inlet.info();
+stream_info = streams{1};
+
+% Create an inlet to receive signal samples from the stream
+inlet = lsl_inlet(stream_info);
 
 % Get individual stream attributes
 stream_name = stream_info.name();
