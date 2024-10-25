@@ -67,15 +67,15 @@ class Lsl():
         # Store sensor channel info & units in the dictionary
         stream_channels = dict()
         channels = self.stream_info.desc().child("channels").child("channel")
-
+ 
         # Loop through all available channels
-        for i in range(stream_n_channels - 1):
+        for i in range(stream_n_channels):
 
             # Get the channel number (e.g. 1)
             channel = i + 1
 
             # Get the channel type (e.g. ECG)
-            sensor = channels.child_value("sensor")
+            sensor = channels.child_value("label")
 
             # Get the channel unit (e.g. mV)
             unit = channels.child_value("unit")
@@ -83,6 +83,7 @@ class Lsl():
             # Store the information in the stream_channels dictionary
             stream_channels.update({channel: [sensor, unit]})
             channels = channels.next_sibling()
+        print(f"======= Stream Metadata =======\nStream Name > {stream_name}\nStream MAC > {stream_mac}\nStream Host > {stream_host}\nStream Number of Channels > {stream_n_channels}\n+++ Channels [sensor, units] > {stream_channels}")
 
 
 
